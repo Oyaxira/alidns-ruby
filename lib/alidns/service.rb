@@ -18,8 +18,13 @@ module Alidns
 
     end
 
-    def get_app_key
-      @app_key
+    def describe_domains
+      params = public_params
+      params["Action"] = "DescribeDomains"
+      params = params + "&" + Alidns::Sign.sign("GET", @app_key, @app_secret, params)
+      url = "#{Alidns.config.host}/?#{params}"
+      response = RestClient.get(url)
+      response.body
     end
 
     def describe_doname_record(domainname)
@@ -28,7 +33,6 @@ module Alidns
       params["DomainName"] = "#{domainname}"
       params = params_to_str(params)
       params = params + "&" + Alidns::Sign.sign("GET", @app_key, @app_secret, params)
-      params
       url = "#{Alidns.config.host}/?#{params}"
       response = RestClient.get(url)
       response.body

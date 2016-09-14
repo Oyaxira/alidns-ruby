@@ -16,13 +16,12 @@ class AlidnsTest < Test::Unit::TestCase
     @alidns = Alidns::Service.new
   end
   def test_initialize
-
-    assert_equal ENV['APP_KEY'], @alidns.get_app_key
-
+    assert_equal ENV['APP_KEY'] || 'your app key', Alidns.config.app_key
+    assert_equal ENV['APP_SECRET'] || 'your app secret key', Alidns.config.app_secret
   end
 
   def test_domain_record
-    assert_equal 1, @alidns.describe_doname_record("oyaxira.com")
+    assert_not_nil @alidns.describe_doname_record("oyaxira.com")["DomainRecords"]
   end
 
 end
