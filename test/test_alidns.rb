@@ -1,6 +1,8 @@
 require 'test/unit'
 require 'alidns'
 require 'dotenv'
+require 'json'
+require 'pry'
 
 class AlidnsTest < Test::Unit::TestCase
   setup do
@@ -21,7 +23,14 @@ class AlidnsTest < Test::Unit::TestCase
   end
 
   def test_domain_record
-    assert_not_nil @alidns.describe_doname_record("oyaxira.com")["DomainRecords"]
+    record = @alidns.describe_doname_record("oyaxira.com")
+    record = JSON.parse(record)["DomainRecords"]["Record"]
+    assert_equal false, record.empty?
+  end
+
+  def test_describe_domains
+   assert_not_nil @alidns.describe_domains
+
   end
 
 end
